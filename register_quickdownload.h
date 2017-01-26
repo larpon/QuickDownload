@@ -1,21 +1,15 @@
 #ifndef REGISTER_QUICKDOWNLOAD_H
 #define REGISTER_QUICKDOWNLOAD_H
 
-#include <QQmlEngine>
-#include <QJSEngine>
+#include <QtCore/QCoreApplication>
+#include <QtQml/QQmlEngine>
 
 #include "src/quickdownload.h"
-#include "qqml.h"
 
-class RegisterQuickDownload {
+static void registerQuickDownload() {
+    qmlRegisterType<QuickDownload>("com.blackgrain.qml.quickdownload", 1, 0, "Download");
+}
 
-public:
-    RegisterQuickDownload() {
-        qmlRegisterType<QuickDownload>("com.blackgrain.qml.quickdownload", 1, 0, "Download");
-    }
-};
-
-static RegisterQuickDownload registerQuickDownload;
+Q_COREAPP_STARTUP_FUNCTION(registerQuickDownload)
 
 #endif // REGISTER_QUICKDOWNLOAD_H
-

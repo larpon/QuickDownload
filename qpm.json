@@ -5,7 +5,7 @@
     "email": "dev.larpon@gmail.com"
   },
   "repository": {
-    "type": "GIT",
+    "type": "GITHUB",
     "url": "https://github.com/Larpon/QuickDownload"
   },
   "version": {
@@ -14,5 +14,5 @@
   "dependencies": [
   ],
   "license": "MIT",
-  "priFilename": "quickdownload.pri"
+  "pri_filename": "quickdownload.pri"
 }

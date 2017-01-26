@@ -1,5 +1,9 @@
 #include "quickdownload.h"
 
+#if defined(QUICKDOWNLOAD_AUTO_REGISTER)
+#include "register_quickdownload.h"
+#endif
+
 QuickDownloadMaster *QuickDownloadMaster::self = 0;
 
 QuickDownloadMaster::QuickDownloadMaster(QObject *parent):
