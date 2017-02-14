@@ -1,6 +1,13 @@
 # QuickDownload
 Easy way to download files with Qt QML and C++
 
+## Features
+* Asynchronous downloads
+* Supports Qt URL schemes (http, https, ftp, custom)
+* Uses QSaveFile = no corrupt or partial file downloads.
+* Possible to set custom NetworkAccessManager via C++
+* Self-register QML type. Plug'n'play.
+
 ## qpm
 Setup [qpm](https://github.com/Cutehacks/qpm) as described in the [Usage for App Developers](https://github.com/Cutehacks/qpm#usage-for-app-developers) section
 ```
