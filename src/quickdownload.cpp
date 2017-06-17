@@ -75,6 +75,7 @@ void QuickDownloadMaster::setNetworkAccessManager(QNetworkAccessManager *network
 QuickDownload::QuickDownload(QObject *parent):
     QObject(parent)
 {
+    _saveFile = nullptr;
     _componentComplete = false;
     _running = false;
     _overwrite = false;
@@ -151,7 +152,7 @@ void QuickDownload::setDestination(const QUrl &destination)
 {
     if(_destination != destination) {
         _destination = destination;
-        if(_saveFile && !_running) { // TODO figure out crash when this is called without "!_running"
+        if(_saveFile && !_running) {
             QString newDestination = _destination.toDisplayString(QUrl::PreferLocalFile);
             if(_saveFile->fileName() != newDestination)
                 _saveFile->setFileName(newDestination);
