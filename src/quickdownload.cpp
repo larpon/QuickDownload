@@ -75,6 +75,7 @@ void QuickDownloadMaster::setNetworkAccessManager(QNetworkAccessManager *network
 QuickDownload::QuickDownload(QObject *parent):
     QObject(parent)
 {
+    _networkReply = nullptr;
     _saveFile = nullptr;
     _componentComplete = false;
     _running = false;
