@@ -8,15 +8,17 @@ Easy way to download files with Qt QML and C++
 * Possible to set custom NetworkAccessManager via C++
 * Self-register QML type. Plug'n'play.
 
-## qpm
+## Install
+
+### qpm
 Setup [qpm](https://github.com/Cutehacks/qpm) as described in the [Usage for App Developers](https://github.com/Cutehacks/qpm#usage-for-app-developers) section
 ```
 qpm install com.blackgrain.qml.quickdownload
 ```
 
-## Manual install
+### Manual install
 
-### Plugin
+#### Plugin
 ```
 cd /path/to/projects
 git clone git@github.com:Larpon/QuickDownload.git
@@ -24,7 +26,7 @@ git clone git@github.com:Larpon/QuickDownload.git
 Open `quickdownload.pro` in QtCreator and build.
 The result should be a `*.so` plugin file.
 
-### Linked
+#### Linked
 
 Clone from github
 ```
