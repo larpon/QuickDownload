@@ -215,6 +215,13 @@ void QuickDownload::start(QUrl url)
         return;
     }
 
+    if(_networkReply) {
+        // Disconnect from any previous signals
+        disconnect(_networkReply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+        disconnect(_networkReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
+        disconnect(_networkReply, SIGNAL(finished()), this, SLOT(onFinished()));
+    }
+
     _networkReply = qQuickDownloadMaster->networkAccessManager()->get(QNetworkRequest(_url));
 
     connect(_networkReply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
@@ -248,6 +255,13 @@ void QuickDownload::onFinished()
         if(_saveFile)
             _saveFile->cancelWriting();
     }
+    if(!_networkReply) {
+        emit error(Error::ErrorNetwork,"Network reply was deleted");
+        if(_saveFile)
+            _saveFile->cancelWriting();
+        shutdownSaveFile();
+        return;
+    }
 
     // get redirection url
     QVariant redirectionTarget = _networkReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
@@ -261,11 +275,12 @@ void QuickDownload::onFinished()
 
         if(_followRedirects) {
             shutdownNetworkReply();
-            _saveFile->open(QIODevice::WriteOnly);
-            _saveFile->resize(0);
+            shutdownSaveFile();
 
             start(newUrl);
             return;
+        } else {
+            emit error(Error::ErrorNetwork,"Re-directs not allowed");
         }
     } else {
         if(_saveFile->commit()) {
@@ -324,6 +339,7 @@ void QuickDownload::shutdownNetworkReply()
 void QuickDownload::shutdownSaveFile()
 {
     if(_saveFile) {
+        _saveFile->commit();
         delete _saveFile;
         _saveFile = 0;
     }
