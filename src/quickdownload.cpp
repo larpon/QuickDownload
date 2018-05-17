@@ -208,6 +208,8 @@ void QuickDownload::start(QUrl url)
         }
     }
 
+    // Commit and delete any previous open _saveFile disregarding it's state
+    shutdownSaveFile();
     _saveFile = new QSaveFile(destination);
     if (!_saveFile->open(QIODevice::WriteOnly)) {
         emit error(Error::ErrorDestination,_saveFile->errorString());
@@ -215,13 +217,8 @@ void QuickDownload::start(QUrl url)
         return;
     }
 
-    if(_networkReply) {
-        // Disconnect from any previous signals
-        disconnect(_networkReply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-        disconnect(_networkReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
-        disconnect(_networkReply, SIGNAL(finished()), this, SLOT(onFinished()));
-    }
-
+    // Shutdown any previous used replies
+    shutdownNetworkReply();
     _networkReply = qQuickDownloadMaster->networkAccessManager()->get(QNetworkRequest(_url));
 
     connect(_networkReply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
@@ -274,8 +271,6 @@ void QuickDownload::onFinished()
         emit redirected(newUrl);
 
         if(_followRedirects) {
-            shutdownNetworkReply();
-            shutdownSaveFile();
 
             start(newUrl);
             return;
@@ -284,11 +279,15 @@ void QuickDownload::onFinished()
         }
     } else {
         if(_saveFile->commit()) {
+            shutdownSaveFile();
             setProgress(1.0);
             setRunning(false);
             emit finished();
-        } else
+        } else {
+            if(_saveFile)
+                _saveFile->cancelWriting();
             emit error(Error::ErrorDestination,"Error while writing \""+_destination.toDisplayString(QUrl::PreferLocalFile)+"\"");
+        }
     }
 
     shutdownNetworkReply();
@@ -297,7 +296,7 @@ void QuickDownload::onFinished()
 
 void QuickDownload::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-    if (!_running)
+    if(!_running)
         return;
     emit update((bytesReceived / 1000), (bytesTotal / 1000));
     setProgress(((qreal)bytesReceived / bytesTotal));
