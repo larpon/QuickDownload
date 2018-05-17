@@ -208,7 +208,9 @@ void QuickDownload::start(QUrl url)
         }
     }
 
-    // Commit and delete any previous open _saveFile disregarding it's state
+    // Cancel and delete any previous open _saveFile disregarding it's state
+    if(_saveFile)
+        _saveFile->cancelWriting();
     shutdownSaveFile();
     _saveFile = new QSaveFile(destination);
     if (!_saveFile->open(QIODevice::WriteOnly)) {
