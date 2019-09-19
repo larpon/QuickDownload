@@ -232,6 +232,15 @@ void QuickDownload::start(QUrl url)
     emit started();
 }
 
+QString QuickDownload::remove_qrc(QString url) {
+    if (url.length()>4) {
+        // fix path to file. example url start with qrc:/home/user
+    if (url.startsWith("qrc:"))
+        url = url.mid(4); // = remove first 4 chars qrc:
+     }
+    return url;
+}
+
 void QuickDownload::start()
 {
     start(_url);

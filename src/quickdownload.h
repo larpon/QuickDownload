@@ -138,6 +138,8 @@ private:
     QSaveFile *_saveFile;
     void shutdownSaveFile();
 
+    QString remove_qrc(QString url);
+
     bool _componentComplete;
 };
 
