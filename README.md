@@ -23,7 +23,7 @@ qpm install com.blackgrain.qml.quickdownload
 cd /path/to/projects
 git clone git@github.com:Larpon/QuickDownload.git
 ```
-Open `quickdownload.pro` in QtCreator and build.
+Open `quickdownload.pro` in Qt Creator and build.
 The result should be a `*.so` plugin file.
 
 #### Linked
